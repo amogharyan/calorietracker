@@ -2,7 +2,7 @@
 
 A nutrition optimization app for UC Berkeley students to make smarter dining decisions based on meal plans, dietary preferences, and real-time data.
 
----
+
 
 ## Tech Stack & Dependencies
 
@@ -13,7 +13,7 @@ A nutrition optimization app for UC Berkeley students to make smarter dining dec
 - **Environment Variables:** dotenv  
 - **Development Tools:** Nodemon for hot reload; ESLint and Prettier (planned)
 
----
+
 
 ## Architecture Overview
 
@@ -23,7 +23,6 @@ A nutrition optimization app for UC Berkeley students to make smarter dining dec
 - Frontend React app consumes API endpoints to display menus, nutrition info, and meal plans  
 - Deployment planned on Vercel for frontend and optionally Heroku or similar for backend
 
----
 
 ## Core API Endpoints (Planned/Current)
 
@@ -34,7 +33,7 @@ A nutrition optimization app for UC Berkeley students to make smarter dining dec
 - `POST /api/auth/register` and `/api/auth/login`  
   User authentication endpoints (planned)
 
----
+
 
 ## Data Model Overview
 
@@ -44,7 +43,7 @@ A nutrition optimization app for UC Berkeley students to make smarter dining dec
 - **Meal Plans:** Track user meal swipes and budget for recommendations  
 - **Nutrition Data:** Sourced from USDA API or AI-based calorie predictions
 
----
+
 
 ## Development Workflow
 
@@ -53,5 +52,3 @@ A nutrition optimization app for UC Berkeley students to make smarter dining dec
 3. Start backend dev server with `npm run dev` (nodemon watches for changes)  
 4. Frontend currently served as static files from `/public` folder  
 5. Test API endpoints locally at `http://localhost:3000`
-
----
