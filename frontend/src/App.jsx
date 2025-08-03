@@ -3,15 +3,15 @@ import MealCard from "./components/MealCard";
 import UserProfile from "./components/UserProfile";
 
 const mockMeal = {
-  name: "grilled chicken salad",
-  description: "fresh greens with grilled chicken, cherry tomatoes, and vinaigrette",
+  name: "sample name",
+  description: "sample description",
   calories: 350,
 };
 
 const mockUser = {
-  name: "Ishrith Gowda",
-  email: "ishrith@example.com",
-  joinedDate: "2025-06-01",
+  name: "name",
+  email: "sample@email.com",
+  joinedDate: "01-01-2001",
 };
 
 const App = () => {
