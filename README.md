@@ -34,18 +34,23 @@ In future iterations, state management solutions like React’s Context API or e
 
 - Express server handles API routes and serves static frontend assets from `/public`  
 - Modular route handlers located in `/routes` folder (e.g., `/api/menus/sync`)  
-- Backend will connect to MongoDB for storing scraped menu data and user profiles (setup pending)  
-- Frontend React app consumes API endpoints to display menus, nutrition info, and meal plans  
+- Backend connects to MongoDB for storing scraped menu data and user profiles  
+- Authentication routes `/api/auth/register` and `/api/auth/login` are implemented using Passport.js with JWT tokens  
+- Frontend React app consumes API endpoints to display menus, nutrition info, meal plans, and user authentication status  
 - Deployment planned on Vercel for frontend and optionally Heroku or similar for backend
 
-## Core API Endpoints (Planned/Current)
+## Core API Endpoints (Implemented/Planned)
 
+- `POST /api/auth/register`  
+  Register a new user with email and password; returns success message on success  
+- `POST /api/auth/login`  
+  Login with email and password; returns JWT token for authenticated requests  
+- `GET /api/protected`  
+  Example protected route requiring valid JWT token; returns user info if authorized  
 - `GET /api/menus/sync`  
   Triggers scraper to fetch latest menus and update database (currently stubbed)  
 - `GET /api/nutrition/:itemName`  
   Fetches or predicts calorie info for a menu item (upcoming)  
-- `POST /api/auth/register` and `/api/auth/login`  
-  User authentication endpoints (planned)
 
 ## Data Model Overview
 
@@ -59,6 +64,6 @@ In future iterations, state management solutions like React’s Context API or e
 
 1. Clone the repo  
 2. Run `npm install` to install dependencies  
-3. Start backend dev server with `npm run dev` (nodemon watches for changes)  
+3. Start backend dev server with `npm run dev` (nodemon watches for changes, server runs on http://localhost:4000)  
 4. Frontend currently served as static files from `/public` folder  
-5. Test API endpoints locally at `http://localhost:3000`
+5. Test API endpoints locally at `http://localhost:4000`
