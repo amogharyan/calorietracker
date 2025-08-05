@@ -1,21 +1,37 @@
-// load environment variables from .env
-require('dotenv').config();
+import passport from "./backend/config/passport.js";
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./backend/config/db.js";
+import authRoutes from "./backend/routes/authRoutes.js";
+import authMiddleware from "./backend/middleware/authMiddleware.js";
 
-const express = require('express');
+dotenv.config(); // load environment variables from .env file
+
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// parse JSON bodies
-app.use(express.json());
+// protected route example: requires valid jwt token to access
+app.get("/api/protected", authMiddleware, (req, res) => {
+  // if token is valid, user info is attached to req.user by authMiddleware
+  res.json({ message: "Access granted to protected route", user: req.user });
+});
 
-// serve static files from /public
-app.use(express.static('public'));
+// simple logger middleware to log all incoming requests to server console
+app.use((req, res, next) => {
+  console.log(`incoming ${req.method} request to ${req.url}`);
+  next();
+});
 
-// mount menus route
-app.use('/api/menus', require('./routes/menus'));
+app.use(cors()); // enable Cross-Origin Resource Sharing for all routes
+app.use(express.json()); // parse incoming json requests automatically
+app.use(passport.initialize()); // initialize passport authentication middleware
 
-// start the server
-app.listen(PORT, () =>
-{
-  console.log(`server listening on http://localhost:${PORT}`);
+connectDB(); // connect to mongodb database
+
+// mount auth-related routes under /api/auth
+app.use("/api/auth", authRoutes);
+
+const PORT = process.env.PORT || 4000; // use env port or default to 4000
+app.listen(PORT, () => {
+  console.log(`server running on port ${PORT}`);
 });
