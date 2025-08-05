@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "b38993f6-81da-4164-bc4e-0f3c84eb6427",
+		"name": "caloritetracker api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47356775",
+		"_collection_link": "https://ishrith-gowda-1990107.postman.co/workspace/Ishrith-Gowda's-Workspace~a081c0ab-3ff2-4ccf-8afc-49a186e43512/collection/47356775-b38993f6-81da-4164-bc4e-0f3c84eb6427?action=share&source=collection_link&creator=47356775"
+	},
+	"item": [
+		{
+			"name": "register user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is valid (200 or 401)\", () => {",
+							"  pm.expect([200, 401]).to.include(pm.response.code);",
+							"});",
+							"",
+							"if (pm.response.code === 200) {",
+							"  pm.test(\"Login success message\", () => {",
+							"    pm.expect(jsonData.message).to.eql(\"Logged in successfully\");",
+							"  });",
+							"",
+							"  pm.test(\"Response has JWT token\", () => {",
+							"    pm.expect(jsonData).to.have.property(\"token\");",
+							"    pm.expect(jsonData.token).to.be.a(\"string\");",
+							"  });",
+							"}",
+							"",
+							"if (pm.response.code === 401) {",
+							"  pm.test(\"Error message is present\", () => {",
+							"    pm.expect(jsonData.message).to.be.a(\"string\");",
+							"  });",
+							"",
+							"  const expectedMessages = [",
+							"    \"Invalid email or password\",",
+							"    \"Email and password are required\"",
+							"  ];",
+							"",
+							"  pm.test(\"Error message is known type\", () => {",
+							"    pm.expect(expectedMessages).to.include(jsonData.message);",
+							"  });",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const timestamp = Date.now();",
+							"const randomNum = Math.floor(Math.random() * 10000);",
+							"const email = `test${timestamp}${randomNum}@example.com`;",
+							"const password = \"mypassword\";",
+							"",
+							"pm.collectionVariables.set(\"email\", email);",
+							"pm.collectionVariables.set(\"password\", password);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"password\": \"somepassword\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"const status = pm.response.code;",
+							"const reqBody = pm.request.body ? JSON.parse(pm.request.body.raw) : {};",
+							"",
+							"pm.test(\"Status code is valid\", function () {",
+							"  pm.expect([200, 400, 401]).to.include(status);",
+							"});",
+							"",
+							"if (status === 200) {",
+							"  pm.test(\"Login successful returns token\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"token\");",
+							"    pm.expect(jsonData.token).to.be.a(\"string\");",
+							"  });",
+							"",
+							"  pm.test(\"Login message is correct\", function () {",
+							"    pm.expect(jsonData.message).to.eql(\"Logged in successfully\");",
+							"  });",
+							"",
+							"  // Save JWT token to collection variable for later requests",
+							"  if (jsonData.token) {",
+							"    pm.collectionVariables.set(\"token\", jsonData.token);",
+							"  }",
+							"} else if (status === 400) {",
+							"  pm.test(\"Proper message for missing fields or invalid format\", function () {",
+							"    if (!reqBody.email || !reqBody.password) {",
+							"      pm.expect(jsonData.message).to.eql(\"Email and password are required\");",
+							"    } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(reqBody.email)) {",
+							"      pm.expect(jsonData.message).to.eql(\"Invalid email format\");",
+							"    }",
+							"  });",
+							"} else if (status === 401) {",
+							"  pm.test(\"Proper message for wrong credentials\", function () {",
+							"    pm.expect(jsonData.message).to.eql(\"Invalid email or password\");",
+							"  });",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"Using email:\", pm.collectionVariables.get(\"email\"));",
+							"console.log(\"Using password:\", pm.collectionVariables.get(\"password\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"validtest1234@example.com\",\n  \"password\": \"somepassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "protected route test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", () => {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has access granted message\", () => {",
+							"  pm.expect(jsonData.message).to.eql(\"Access granted to protected route\");",
+							"});",
+							"",
+							"pm.test(\"Response contains user object with id and email\", () => {",
+							"  pm.expect(jsonData).to.have.property(\"user\");",
+							"  pm.expect(jsonData.user).to.have.property(\"id\");",
+							"  pm.expect(jsonData.user).to.have.property(\"email\");",
+							"  pm.expect(jsonData.user.email).to.be.a(\"string\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/protected",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"protected"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
