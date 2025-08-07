@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import MealCard from './MealCard';
+import MealCard from '../app/components/MealCard';
 
 const mockMeal = {
   name: 'sample name',
