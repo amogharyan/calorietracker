@@ -1,10 +1,10 @@
-import passport from "./backend/config/passport.js";
+import passport from "./config/passport.js";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import connectDB from "./backend/config/db.js";
-import authRoutes from "./backend/routes/authRoutes.js";
-import authMiddleware from "./backend/middleware/authMiddleware.js";
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+import authMiddleware from "./middleware/authMiddleware.js";
 
 dotenv.config(); // load environment variables from .env file
 
