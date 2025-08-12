@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema(
         message: 'Name can only contain letters and spaces',
       },
     },
-
     email: {
       type: String,
       required: [true, 'Please add an email'],
@@ -25,7 +24,6 @@ const userSchema = new mongoose.Schema(
         message: (props) => `${props.value} is not a valid email address`,
       },
     },
-
     password: {
       type: String,
       required: [true, 'Please add a password'],
@@ -41,80 +39,66 @@ const userSchema = new mongoose.Schema(
         message: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
       },
     },
-
     avatar: {
       type: String,
       default: null,
     },
-
     isEmailVerified: {
       type: Boolean,
       default: false,
     },
-
     emailVerificationToken: {
       type: String,
       default: null,
     },
-
     passwordResetToken: {
       type: String,
       default: null,
     },
-
     passwordResetExpires: {
       type: Date,
       default: null,
     },
-
     lastLogin: {
       type: Date,
       default: null,
     },
-
     isActive: {
       type: Boolean,
       default: true,
     },
-
     preferences: {
       dietaryRestrictions: {
         type: [String],
         enum: ['vegetarian', 'vegan', 'gluten-free', 'dairy-free', 'nut-free', 'keto', 'paleo', 'low-sodium'],
         default: [],
       },
-
       dailyCalorieGoal: {
         type: Number,
         default: 2000,
         min: [1000, 'Daily calorie goal must be at least 1000'],
         max: [5000, 'Daily calorie goal cannot exceed 5000'],
       },
-
       preferredCuisine: {
         type: String,
         enum: ['american', 'italian', 'chinese', 'mexican', 'indian', 'japanese', 'mediterranean'],
         default: 'american',
       },
-
       activityLevel: {
         type: String,
         enum: ['sedentary', 'lightly-active', 'moderately-active', 'very-active', 'extremely-active'],
         default: 'moderately-active',
       },
-
       notificationsEnabled: {
         type: Boolean,
         default: true,
       },
-
       theme: {
         type: String,
         enum: ['light', 'dark', 'auto'],
         default: 'auto',
       },
     },
-
     profile: {
       age: {
         type: Number,
@@ -125,18 +109,15 @@ const userSchema = new mongoose.Schema(
         type: String,
         default: null,
       },
-
       bio: {
         type: String,
         maxlength: [250, 'Bio cannot exceed 250 characters'],
         default: '',
       },
-
       gender: {
         type: String,
         enum: ['male', 'female', 'other', 'prefer-not-to-say'],
       },
-
       height: {
         value: Number,
         unit: {
@@ -145,7 +126,6 @@ const userSchema = new mongoose.Schema(
           default: 'ft',
         },
       },
-
       weight: {
         value: Number,
         unit: {
@@ -154,7 +134,6 @@ const userSchema = new mongoose.Schema(
           default: 'lbs',
         },
       },
-
       goalWeight: {
         value: Number,
         unit: {
@@ -164,29 +143,24 @@ const userSchema = new mongoose.Schema(
         },
       },
     },
-
     mealPlan: {
       type: {
         type: String,
         enum: ['unlimited', 'premium', 'standard', 'basic'],
         default: 'standard',
       },
-
       swipesRemaining: {
         type: Number,
         default: 14,
       },
-
       flexDollars: {
         type: Number,
         default: 150.00,
       },
-
       flexplusDollars: {
         type: Number,
         default: 150.00,
       },
-      
       weeklySwipeReset: {
         type: Date,
         default: () => {
@@ -258,14 +232,12 @@ userSchema.statics.findByEmail = function(email) {
 userSchema.virtual('profileCompletion').get(function() {
   let completion = 0;
   const fields = ['name', 'email', 'preferences.dailyCalorieGoal', 'profile.age', 'profile.height.value', 'profile.weight.value'];
-  
   fields.forEach(field => {
     const value = field.split('.').reduce((obj, key) => obj?.[key], this);
     if (value !== undefined && value !== null && value !== '') {
       completion += 1;
     }
   });
-  
   return Math.round((completion / fields.length) * 100);
 });
 
