@@ -1,5 +1,6 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -188,14 +189,17 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.index({ email: 1 }, { unique: true });
+// Indexes for performance
 userSchema.index({ isActive: 1 });
 userSchema.index({ lastLogin: -1 });
 userSchema.index({ createdAt: -1 });
 userSchema.index({ email: 1, isActive: 1 });
+
+// Pre-save middleware to hash password
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   if (this.password.startsWith('$2')) return next();
+  
   try {
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
@@ -205,6 +209,7 @@ userSchema.pre('save', async function(next) {
   }
 });
 
+// Instance methods
 userSchema.methods.comparePassword = async function(candidatePassword) {
   try {
     return await bcrypt.compare(candidatePassword, this.password);
@@ -218,6 +223,7 @@ userSchema.methods.updateLastLogin = function() {
   return this.save({ validateBeforeSave: false });
 };
 
+// Static methods
 userSchema.statics.findActiveUsers = function() {
   return this.find({ isActive: true });
 };
@@ -229,6 +235,7 @@ userSchema.statics.findByEmail = function(email) {
   });
 };
 
+// Virtual for profile completion percentage
 userSchema.virtual('profileCompletion').get(function() {
   let completion = 0;
   const fields = ['name', 'email', 'preferences.dailyCalorieGoal', 'profile.age', 'profile.height.value', 'profile.weight.value'];
@@ -241,5 +248,6 @@ userSchema.virtual('profileCompletion').get(function() {
   return Math.round((completion / fields.length) * 100);
 });
 
+// Export the model
 const User = mongoose.models.User || mongoose.model('User', userSchema);
-export default User;
+module.exports = User;

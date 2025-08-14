@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI;
-const NODE_ENV = process.env.NODE_ENV || 'development';
 
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+if (!MONGODB_URI && process.env.NODE_ENV !== 'test') {
+  throw new Error(
+    `Please define the MONGODB_URI environment variable in .env.local or .env.test (current NODE_ENV=${process.env.NODE_ENV})`
+  );
 }
 
 let cached = global.mongoose;
@@ -13,7 +14,7 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
-async function connectDB() {
+export async function connectDB(uri = MONGODB_URI) {
   if (cached.conn) {
     return cached.conn;
   }
@@ -21,7 +22,8 @@ async function connectDB() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      maxPoolSize: 10,
+      maxPoolSize: process.env.NODE_ENV === 'production' ? 20 : 10,
+      minPoolSize: process.env.NODE_ENV === 'production' ? 5 : undefined,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
       family: 4,
@@ -29,28 +31,26 @@ async function connectDB() {
       w: 'majority',
     };
 
-    if (NODE_ENV === 'production') {
-      opts.maxPoolSize = 20;
-      opts.minPoolSize = 5;
-    }
+    cached.promise = mongoose.connect(uri, opts).then((mongooseInstance) => {
+      console.log(`[MongoDB] Connected successfully to ${process.env.NODE_ENV === 'test' ? 'in-memory server' : 'MongoDB Atlas/Local'}`);
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log('MongoDB connected successfully');
-      
-      mongoose.connection.on('error', (error) => {
-        console.error('MongoDB connection error:', error);
+      mongooseInstance.connection.on('error', (error) => {
+        console.error('[MongoDB] Connection error:', error);
       });
 
-      mongoose.connection.on('disconnected', () => {
-        console.warn('MongoDB disconnected');
+      mongooseInstance.connection.on('disconnected', () => {
+        console.warn('[MongoDB] Disconnected');
       });
 
-      process.on('SIGINT', async () => {
-        await mongoose.connection.close();
-        console.log('MongoDB connection closed through app termination');
-        process.exit(0);
-      });
-      return mongoose;
+      if (process.env.NODE_ENV !== 'test') {
+        process.on('SIGINT', async () => {
+          await mongooseInstance.connection.close();
+          console.log('[MongoDB] Connection closed due to app termination');
+          process.exit(0);
+        });
+      }
+
+      return mongooseInstance;
     });
   }
 
@@ -60,15 +60,16 @@ async function connectDB() {
     cached.promise = null;
     throw e;
   }
+
   return cached.conn;
 }
 
 export async function disconnectDB() {
   if (cached.conn) {
-    await cached.conn.disconnect();
+    await mongoose.disconnect();
     cached.conn = null;
     cached.promise = null;
-    console.log('MongoDB connection closed');
+    console.log('[MongoDB] Connection closed');
   }
 }
 

@@ -53,35 +53,49 @@ router.post("/register", async (req, res) => {
 
 // route: POST /api/auth/login
 // purpose: authenticate a user and return a jwt token if successful
-router.post("/login", (req, res, next) => {
-  const { email, password } = req.body;
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  // validate input presence
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email and password are required" });
-  }
-
-  // check if email is valid format using validator package
-  if (!validator.isEmail(email)) {
-    return res.status(400).json({ message: "Invalid email format" });
-  }
-
-  // use passport local strategy to verify credentials
-  passport.authenticate("local", { session: false }, (err, user, info) => {
-    if (err) return next(err);
-
-    // if no user found or credentials wrong
-    if (!user) {
-      return res.status(401).json({ message: "Invalid email or password" });
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ message: 'Please provide a valid email address' });
     }
 
-    // generate a jwt token with user id and email
-    const payload = { id: user._id, email: user.email };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+    // Find user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
 
-    // respond with the token and success message
-    return res.json({ token, message: "Logged in successfully" });
-  })(req, res, next);
+    // Check password
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    // Generate JWT
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      return res.status(500).json({ message: 'JWT secret not configured' });
+    }
+    const token = jwt.sign({ id: user._id }, jwtSecret, { expiresIn: '1d' });
+
+    return res.status(200).json({
+      token,
+      user: {
+        email: user.email,
+        name: user.name,
+        // add other user fields as needed
+      }
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 export default router;

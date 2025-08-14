@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import validator from 'validator';
 import User from '@/models/User';
-import connectDB from '@/lib/db';
+import connectDB from '@/lib/db.js';
 import { NextResponse } from 'next/server';
 import logger from '@/lib/logger';
 

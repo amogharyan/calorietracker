@@ -6,6 +6,7 @@ import connectDB from "./backend/config/db.js";
 import authRoutes from "./backend/routes/authRoutes.js";
 import menuRoutes from "./backend/routes/menuRoutes.js";
 import authMiddleware from "./backend/middleware/authMiddleware.js";
+import rateLimitMiddleware from "./backend/middleware/rateLimitMiddleware.js";
 
 dotenv.config(); // load environment variables from .env file
 
@@ -33,6 +34,10 @@ app.get("/api/protected", authMiddleware, (req, res) => {
   // if token is valid, user info is attached to req.user by authMiddleware
   res.json({ message: "Access granted to protected route", user: req.user });
 });
+
+if (process.env.NODE_ENV !== 'test') {
+  app.use(rateLimitMiddleware);
+}
 
 const PORT = process.env.PORT || 4000; // use env port or default to 4000
 app.listen(PORT, () => {

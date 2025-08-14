@@ -1,7 +1,13 @@
-process.env.NODE_ENV = 'test'
-require('dotenv').config({ path: '.env.test' })
-module.exports = {
+// backend/jest.config.js
+require('dotenv').config({ path: 'backend/.env.test' });
+
+module.exports =
+{
   testEnvironment: 'node',
-  transform: { '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest' },
-  verbose: true
-}
+  testTimeout: 15000,
+  roots: ['<rootDir>'],
+  moduleNameMapper: {'^@/(.*)$': '<rootDir>/$1',},
+  setupFilesAfterEnv: ['<rootDir>/test-utils/setup.js'],
+  globalSetup: '<rootDir>/test-utils/globalSetup.js',
+  globalTeardown: '<rootDir>/test-utils/globalTeardown.js',
+};
