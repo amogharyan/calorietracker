@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const User = require('../models/User.js') // Corrected path
-const { POST: registerPOST } = require('../../frontend/app/api/auth/register/route.js')
-const { POST: loginPOST } = require('../../frontend/app/api/auth/login/route.js')
+const { POST: registerPOST } = require('../api/auth/register/route.js')
+const { POST: loginPOST } = require('../api/auth/login/route.js')
 
 // Mock NextResponse for testing
 const NextResponse = {

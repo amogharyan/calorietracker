@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { GET } = require('../../frontend/app/api/nutrition/[itemName]/route.js')
+const { GET } = require('../api/nutrition/[itemName]/route.js')
 
 // Mock fetch for USDA API calls
 global.fetch = jest.fn()

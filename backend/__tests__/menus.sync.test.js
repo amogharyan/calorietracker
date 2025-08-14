@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { GET, POST } = require('../../frontend/app/api/menus/sync/route.js')
+const { GET, POST } = require('../api/menus/sync/route.js')
 
 // Mock NextResponse for testing
 const NextResponse = {
