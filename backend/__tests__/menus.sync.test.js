@@ -1,119 +1,67 @@
-// backend/__tests__/nutrition.itemName.test.js
+// backend/__tests__/menus.sync.test.js
 const mongoose = require('mongoose');
 
-// Import the route handler
-let GET;
-
-// Mock fetch for USDA API calls
-global.fetch = jest.fn();
+// Import route handlers
+let GET, POST;
 
 // Create mock request
-function createRequest(itemName) {
+function createRequest(body = {}) {
   return {
-    params: { itemName },
+    json: async () => body,
     headers: new Map()
   };
 }
 
-describe('GET /api/nutrition/[itemName]', () => {
+describe('Menu Sync Routes', () => {
   beforeAll(async () => {
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect(process.env.MONGODB_URI);
     }
     
     // Dynamic import for ES modules
-    const nutritionModule = await import('../api/nutrition/[itemName]/route.js');
-    GET = nutritionModule.GET;
+    const menuModule = await import('../api/menus/sync/route.js');
+    GET = menuModule.GET;
+    POST = menuModule.POST;
   });
 
-  afterEach(() => {
-    fetch.mockClear();
+  describe('GET /api/menus/sync', () => {
+    test('returns success status', async () => {
+      const req = createRequest();
+      const res = await GET(req);
+
+      expect(res.statusCode).toBe(200);
+      expect(res._data).toHaveProperty('status', 'success');
+      expect(res._data).toHaveProperty('message', 'Menu sync route is working');
+      expect(res._data).toHaveProperty('timestamp');
+      expect(res._data).toHaveProperty('menus');
+      expect(Array.isArray(res._data.menus)).toBe(true);
+    });
   });
 
-  test('returns nutrition info for valid item', async () => {
-    // Mock USDA API response
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve({
-        foods: [{
-          foodNutrients: [
-            { nutrientName: 'Energy', value: 95 }
-          ]
-        }]
-      })
+  describe('POST /api/menus/sync', () => {
+    test('triggers menu sync successfully', async () => {
+      const requestBody = { source: 'test' };
+      const req = createRequest(requestBody);
+      const res = await POST(req);
+
+      expect(res.statusCode).toBe(200);
+      expect(res._data).toHaveProperty('status', 'success');
+      expect(res._data).toHaveProperty('message', 'Menu sync triggered successfully');
+      expect(res._data).toHaveProperty('timestamp');
+      expect(res._data).toHaveProperty('menus');
+      expect(Array.isArray(res._data.menus)).toBe(true);
+      expect(res._data.menus.length).toBeGreaterThan(0);
     });
 
-    const req = createRequest('apple');
-    const res = await GET(req);
+    test('returns stub menu data', async () => {
+      const req = createRequest({});
+      const res = await POST(req);
 
-    expect(res.statusCode).toBe(200);
-    expect(res._data).toHaveProperty('calories', 95);
-  });
-
-  test('returns error for missing item name', async () => {
-    const req = { params: {} };
-    const res = await GET(req);
-
-    expect(res.statusCode).toBe(400);
-    expect(res._data.message).toBe('Missing item name');
-  });
-
-  test('handles USDA API error', async () => {
-    fetch.mockResolvedValueOnce({
-      ok: false,
-      status: 500
+      expect(res.statusCode).toBe(200);
+      expect(res._data.menus).toEqual([
+        { id: 1, name: "sample menu item 1", calories: 100 },
+        { id: 2, name: "sample menu item 2", calories: 200 }
+      ]);
     });
-
-    const req = createRequest('invaliditem');
-    const res = await GET(req);
-
-    expect(res.statusCode).toBe(502);
-    expect(res._data.message).toBe('USDA API error');
-  });
-
-  test('handles no food data found', async () => {
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve({ foods: [] })
-    });
-
-    const req = createRequest('nonexistentfood');
-    const res = await GET(req);
-
-    expect(res.statusCode).toBe(404);
-    expect(res._data.message).toBe('No data found');
-  });
-
-  test('handles missing calorie data', async () => {
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve({
-        foods: [{
-          foodNutrients: [
-            { nutrientName: 'Protein', value: 1.2 }
-          ]
-        }]
-      })
-    });
-
-    const req = createRequest('proteinbar');
-    const res = await GET(req);
-
-    expect(res.statusCode).toBe(404);
-    expect(res._data.message).toBe('Calorie data unavailable');
-  });
-
-  test('handles missing USDA API key', async () => {
-    const originalKey = process.env.USDA_API_KEY;
-    delete process.env.USDA_API_KEY;
-
-    const req = createRequest('apple');
-    const res = await GET(req);
-
-    expect(res.statusCode).toBe(500);
-    expect(res._data.message).toBe('USDA API key not configured');
-
-    // Restore the key
-    process.env.USDA_API_KEY = originalKey;
   });
 });

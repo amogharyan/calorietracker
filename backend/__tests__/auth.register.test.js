@@ -1,6 +1,15 @@
 // backend/__tests__/auth.register.test.js
 const mongoose = require('mongoose');
 
+// Mock logger before any imports
+jest.mock('../lib/logger.js', () => ({
+  default: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn()
+  }
+}));
+
 // Import modules
 let User, POST;
 
@@ -24,6 +33,14 @@ describe('POST /api/auth/register', () => {
     
     User = userModule.default;
     POST = registerModule.POST;
+  });
+
+  beforeEach(async () => {
+    await User.deleteMany({});
+  });
+
+  afterEach(async () => {
+    await User.deleteMany({});
   });
 
   test('registers user successfully', async () => {

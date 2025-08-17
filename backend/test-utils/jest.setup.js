@@ -1,29 +1,20 @@
 // backend/test-utils/jest.setup.js
 const mongoose = require('mongoose');
 
-// Mock Next.js modules
-jest.mock('next/server', () => ({
-  NextResponse: {
-    json: (data, options = {}) => ({
-      _data: data,
-      statusCode: options.status || 200,
-      status: options.status || 200,
-      json: async () => data
-    })
-  }
-}));
+// Mock Next.js NextResponse to work like a regular response object
+const mockNextResponse = {
+  json: (data, options = {}) => ({
+    _data: data,
+    statusCode: options.status || 200,
+    status: options.status || 200,
+    json: async () => data
+  })
+};
 
-// Mock logger
-jest.mock('../lib/logger.js', () => ({
-  info: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
-  default: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn()
-  }
-}));
+// Create a virtual module for next/server
+jest.doMock('next/server', () => ({
+  NextResponse: mockNextResponse
+}), { virtual: true });
 
 // Global test timeout
 jest.setTimeout(30000);
@@ -41,7 +32,11 @@ afterEach(async () => {
   if (mongoose.connection.readyState !== 0) {
     const collections = mongoose.connection.collections;
     for (const key in collections) {
-      await collections[key].deleteMany({});
+      try {
+        await collections[key].deleteMany({});
+      } catch (error) {
+        // Ignore cleanup errors
+      }
     }
   }
 });
@@ -49,6 +44,10 @@ afterEach(async () => {
 // Final cleanup
 afterAll(async () => {
   if (mongoose.connection.readyState !== 0) {
-    await mongoose.connection.close();
+    try {
+      await mongoose.connection.close();
+    } catch (error) {
+      // Ignore cleanup errors
+    }
   }
 });

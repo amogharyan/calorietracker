@@ -2,6 +2,15 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+// Mock logger before any imports
+jest.mock('../lib/logger.js', () => ({
+  default: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn()
+  }
+}));
+
 // Import modules
 let User, POST;
 
@@ -15,6 +24,7 @@ function createRequest(body) {
 
 describe('POST /api/auth/login', () => {
   beforeAll(async () => {
+    // Connect to test database
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect(process.env.MONGODB_URI);
     }
@@ -28,7 +38,8 @@ describe('POST /api/auth/login', () => {
   });
 
   beforeEach(async () => {
-    // Create test user
+    // Clear and create test user
+    await User.deleteMany({});
     const hashed = await bcrypt.hash('Testpass123!', 10);
     await User.create({ 
       name: 'Login User',

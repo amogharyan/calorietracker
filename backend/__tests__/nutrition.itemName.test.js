@@ -1,6 +1,21 @@
 // backend/__tests__/nutrition.itemName.test.js
 const mongoose = require('mongoose');
-const { GET } = require('../api/nutrition/[itemName]/route.js');
+
+// Mock the database connection and logger before any imports
+jest.mock('../lib/db.js', () => ({
+  default: jest.fn().mockResolvedValue(true)
+}));
+
+jest.mock('../lib/logger.js', () => ({
+  default: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn()
+  }
+}));
+
+// Import the route handler
+let GET;
 
 // Mock fetch for USDA API calls
 global.fetch = jest.fn();
@@ -18,9 +33,13 @@ describe('GET /api/nutrition/[itemName]', () => {
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect(process.env.MONGODB_URI);
     }
+    
+    // Dynamic import for ES modules
+    const nutritionModule = await import('../api/nutrition/[itemName]/route.js');
+    GET = nutritionModule.GET;
   });
 
-  afterEach(() => {
+  beforeEach(() => {
     fetch.mockClear();
   });
 

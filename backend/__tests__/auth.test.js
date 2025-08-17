@@ -2,24 +2,17 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-// Import modules correctly
-let User, registerPOST, loginPOST;
-
-// Use dynamic imports for ES modules
-beforeAll(async () => {
-  if (mongoose.connection.readyState === 0) {
-    await mongoose.connect(process.env.MONGODB_URI);
+// Mock logger before any imports
+jest.mock('../lib/logger.js', () => ({
+  default: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn()
   }
-  
-  // Dynamic imports
-  const userModule = await import('../models/User.js');
-  const registerModule = await import('../api/auth/register/route.js');
-  const loginModule = await import('../api/auth/login/route.js');
-  
-  User = userModule.default;
-  registerPOST = registerModule.POST;
-  loginPOST = loginModule.POST;
-});
+}));
+
+// Import modules
+let User, registerPOST, loginPOST;
 
 // Create mock request
 function createRequest(body) {
@@ -30,6 +23,25 @@ function createRequest(body) {
 }
 
 describe('Auth Endpoints Integration', () => {
+  beforeAll(async () => {
+    if (mongoose.connection.readyState === 0) {
+      await mongoose.connect(process.env.MONGODB_URI);
+    }
+    
+    // Dynamic imports
+    const userModule = await import('../models/User.js');
+    const registerModule = await import('../api/auth/register/route.js');
+    const loginModule = await import('../api/auth/login/route.js');
+    
+    User = userModule.default;
+    registerPOST = registerModule.POST;
+    loginPOST = loginModule.POST;
+  });
+
+  beforeEach(async () => {
+    await User.deleteMany({});
+  });
+
   afterEach(async () => {
     await User.deleteMany({});
   });

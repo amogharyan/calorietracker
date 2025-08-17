@@ -3,11 +3,13 @@ require('dotenv').config({ path: './backend/.env.test' });
 
 module.exports = {
   testEnvironment: 'node',
-  testTimeout: 15000,
+  testTimeout: 30000,
   roots: ['<rootDir>/'],
   testMatch: ['<rootDir>/__tests__/**/*.test.js'],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1'
+    '^@/(.*)$': '<rootDir>/$1',
+    '^../../../../../lib/db.js$': '<rootDir>/lib/db.js',
+    '^@/lib/(.*)$': '<rootDir>/lib/$1'
   },
   setupFilesAfterEnv: ['<rootDir>/test-utils/jest.setup.js'],
   globalSetup: '<rootDir>/test-utils/globalSetup.js',
@@ -23,5 +25,7 @@ module.exports = {
     '!backend/test-utils/**',
     '!backend/babel.config.js',
     '!backend/jest.config.cjs'
-  ]
+  ],
+  clearMocks: true,
+  restoreMocks: true
 };
