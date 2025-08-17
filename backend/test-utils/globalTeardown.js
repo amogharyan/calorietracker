@@ -1,23 +1,19 @@
-// Global teardown - runs once after all tests
-const mongoose = require('mongoose');
-
-module.exports = async () => {
-  // Close any remaining mongoose connections
-  if (mongoose.connection.readyState !== 0) {
-    await mongoose.connection.close();
-    console.log('Closed remaining mongoose connections');
-  }
-  
-  // Stop MongoDB Memory Server if it was used
+// backend/test-utils/globalTeardown.js
+const globalTeardown = async () => {
+  // Stop MongoDB Memory Server
   if (global.__MONGOD__) {
-    console.log('Stopping MongoDB Memory Server...');
-    await global.__MONGOD__.stop();
-    console.log('MongoDB Memory Server stopped');
+    try {
+      await global.__MONGOD__.stop();
+      console.log('MongoDB Memory Server stopped');
+    } catch (error) {
+      console.error('Error stopping MongoDB Memory Server:', error);
+    }
   }
   
-  // Clear any remaining timers
-  clearTimeout();
-  clearInterval();
-  
-  console.log('Global test teardown completed');
+  // Clean up any remaining timers
+  if (global.gc) {
+    global.gc();
+  }
 };
+
+module.exports = globalTeardown;

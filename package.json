@@ -1,66 +1,30 @@
 {
   "name": "calorietracker",
   "version": "1.0.0",
-  "description": "a nutrition optimization app for UC Berkeley students",
-  "main": "index.js",
+  "description": "A nutrition optimization app for UC Berkeley students",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "jest --config backend/jest.config.js",
-    "test:watch": "jest --config backend/jest.config.js --watch",
-    "test:coverage": "jest --config backend/jest.config.js --coverage",
-    "test:debug": "jest --config backend/jest.config.js --verbose --no-cache"
+    "test": "jest --config backend/jest.config.cjs --runInBand",
+    "test:watch": "jest --config backend/jest.config.cjs --watch --runInBand",
+    "test:coverage": "jest --config backend/jest.config.cjs --coverage --runInBand"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.27.1",
+    "@babel/preset-env": "^7.22.0",
+    "@babel/preset-react": "^7.22.0",
+    "@babel/preset-typescript": "^7.22.0",
+    "babel-jest": "^29.5.0",
+    "jest": "^29.5.0",
+    "mongodb-memory-server": "^8.12.2",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.6.1",
-    "express-rate-limit": "^7.5.1",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.3",
-    "next": "^14.0.4",
+    "dotenv": "^16.3.1",
+    "express-rate-limit": "^6.8.1",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.3.1",
     "node-fetch": "^2.6.12",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "validator": "^13.15.15"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.23.6",
-    "@babel/preset-env": "^7.28.0",
-    "@babel/preset-react": "^7.27.1",
-    "@babel/preset-typescript": "^7.23.3",
-    "@types/node": "^20.10.5",
-    "babel-jest": "^29.7.0",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "^14.0.4",
-    "jest": "^29.7.0",
-    "mongodb-memory-server": "^9.5.0",
-    "prettier": "^3.1.1",
-    "typescript": "^5.3.3"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
-  },
-  "keywords": [
-    "nutrition",
-    "food",
-    "calories",
-    "berkeley",
-    "meal-planning",
-    "health",
-    "diet"
-  ],
-  "author": "Ishrith & Amogh",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yourusername/calorietracker.git"
-  },
-  "bugs": {
-    "url": "https://github.com/yourusername/calorietracker/issues"
-  },
-  "homepage": "https://github.com/yourusername/calorietracker#readme"
+    "validator": "^13.9.0"
+  }
 }

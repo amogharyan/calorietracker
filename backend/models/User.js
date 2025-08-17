@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+// backend/models/User.js
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema(
   {
@@ -250,4 +251,4 @@ userSchema.virtual('profileCompletion').get(function() {
 
 // Export the model
 const User = mongoose.models.User || mongoose.model('User', userSchema);
-module.exports = User;
+export default User;
