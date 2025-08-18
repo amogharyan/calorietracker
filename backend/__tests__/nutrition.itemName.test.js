@@ -49,14 +49,14 @@ describe('GET /api/nutrition/[itemName]', () =>
     {
       await mongoose.connect(process.env.MONGODB_URI);
     }
-    const nutritionModule = await import('../api/nutrition/[itemName]/route.js');
+    const nutritionModule = await import('../app/api/nutrition/[itemName]/route.js');
     GET = nutritionModule.GET;
   });
 
   beforeEach(() => 
   {
     fetch.mockClear();
-    const nutritionModule = require('../api/nutrition/[itemName]/route.js');
+    const nutritionModule = require('../app/api/nutrition/[itemName]/route.js');
     if (nutritionModule.mockCache) 
     {
       nutritionModule.mockCache.clear();

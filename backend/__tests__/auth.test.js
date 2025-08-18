@@ -17,8 +17,8 @@ describe('Auth Endpoints Integration', () =>
       await mongoose.connect(process.env.MONGODB_URI);
     }
     const userModule = await import('../models/User.js');
-    const registerModule = await import('../api/auth/register/route.js');
-    const loginModule = await import('../api/auth/login/route.js');
+    const registerModule = await import('../app/api/auth/register/route.js');
+    const loginModule = await import('../app/api/auth/login/route.js');
     User = userModule.default;
     registerPOST = registerModule.POST;
     loginPOST = loginModule.POST;

@@ -15,7 +15,7 @@ describe('POST /api/auth/register', () =>
       await mongoose.connect(process.env.MONGODB_URI);
     }
     const userModule = await import('../models/User.js');
-    const registerModule = await import('../api/auth/register/route.js');
+    const registerModule = await import('../app/api/auth/register/route.js');
     User = userModule.default;
     POST = registerModule.POST;
   });

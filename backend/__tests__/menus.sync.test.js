@@ -21,7 +21,7 @@ describe('Menu Sync Routes', () =>
     {
       await mongoose.connect(process.env.MONGODB_URI);
     }
-    const menuModule = await import('../api/menus/sync/route.js');
+    const menuModule = await import('../app/api/menus/sync/route.js');
     GET = menuModule.GET;
     POST = menuModule.POST;
   });
