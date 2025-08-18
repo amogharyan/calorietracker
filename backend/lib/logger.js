@@ -1,15 +1,20 @@
-import winston from 'winston';
-
-const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.errors({ stack: true }),
-    winston.format.json()
-  ),
-  transports: [
-    new winston.transports.Console({ stderrLevels: ['error'] })
-  ],
-});
+// backend/lib/logger.js
+const logger = {
+  info: (message, meta = {}) => {
+    if (process.env.NODE_ENV !== 'test') {
+      console.log(`INFO: ${message}`, meta);
+    }
+  },
+  warn: (message, meta = {}) => {
+    if (process.env.NODE_ENV !== 'test') {
+      console.warn(`WARN: ${message}`, meta);
+    }
+  },
+  error: (message, meta = {}) => {
+    if (process.env.NODE_ENV !== 'test') {
+      console.error(`ERROR: ${message}`, meta);
+    }
+  },
+}
 
 export default logger;

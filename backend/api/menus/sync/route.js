@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db.js';
+import logger from '@/lib/logger';
 
 export async function GET(request) 
 {
@@ -18,7 +19,7 @@ export async function GET(request)
 
   } catch (error) 
   {
-    console.error('Menu sync error:', error);
+    logger.error('Menu sync GET error', { error: error.message, stack: error.stack });
     return NextResponse.json(
       { 
         message: 'Menu sync failed',
@@ -35,13 +36,14 @@ export async function POST(request)
   {
     await connectDB();  
     const body = await request.json();
-    console.log('Menu sync triggered with data:', body);
+    logger.info('Menu sync POST triggered', { body });
+
     function stubMenus()
     {
-        return [
-            {id: 1, name: "sample menu item 1", calories: 100},
-            {id: 2, name: "sample menu item 2", calories: 200}
-        ]
+      return [
+        {id: 1, name: "sample menu item 1", calories: 100},
+        {id: 2, name: "sample menu item 2", calories: 200}
+      ]
     }
 
     return NextResponse.json(
@@ -56,7 +58,7 @@ export async function POST(request)
 
   } catch (error) 
   {
-    console.error('Menu sync POST error:', error);
+    logger.error('Menu sync POST error', { error: error.message, stack: error.stack });
     return NextResponse.json(
       { 
         message: 'Menu sync failed',

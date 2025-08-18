@@ -11,6 +11,7 @@ export async function POST(request)
   {
     await connectDB();
     const { email, password } = await request.json();
+
     if (!email || !password) 
     {
       return NextResponse.json(
@@ -32,6 +33,7 @@ export async function POST(request)
       email: email.toLowerCase().trim(),
       isActive: true 
     }).select('+password');
+
     if (!user) 
     {
       logger.warn('Login attempt with non-existent email', { email });
@@ -62,12 +64,27 @@ export async function POST(request)
       email: user.email,
       name: user.name 
     };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+    let token;
+    try 
+    {
+      token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+    } 
+    catch (jwtError) 
+    {
+      logger.error('JWT signing error', { error: jwtError.message, stack: jwtError.stack });
+      return NextResponse.json(
+        { message: 'Authentication failed. Please try again later.' },
+        { status: 500 }
+      );
+    }
+
     logger.info('User logged in successfully', 
     { 
       userId: user._id, 
       email: user.email 
     });
+
     return NextResponse.json(
       {
         message: 'Logged in successfully',

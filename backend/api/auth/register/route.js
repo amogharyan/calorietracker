@@ -31,6 +31,7 @@ export async function POST(request)
         });
       });
     }
+
     await connectDB();
     const { email, password, name, preferences } = await request.json();
     const validationErrors = {};
@@ -57,7 +58,7 @@ export async function POST(request)
       {
         validationErrors.password = 'Password must be at least 8 characters long';
       }
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
       if (!passwordRegex.test(password)) 
       {
         validationErrors.password = 'Password must contain at least one uppercase letter, lowercase letter, number, and special character';
@@ -81,22 +82,21 @@ export async function POST(request)
         { status: 409 }
       );
     }
+
     const userData = 
     {
       name: name.trim(),
       email: email.toLowerCase().trim(),
       password,
+      preferences: {}
     };
-    if (preferences) 
+    if (preferences?.dailyCalorieGoal) 
     {
-      if (preferences.dailyCalorieGoal) 
-      {
-        userData.preferences = { ...userData.preferences, dailyCalorieGoal: preferences.dailyCalorieGoal };
-      }
-      if (preferences.dietaryRestrictions) 
-      {
-        userData.preferences = { ...userData.preferences, dietaryRestrictions: preferences.dietaryRestrictions };
-      }
+      userData.preferences.dailyCalorieGoal = preferences.dailyCalorieGoal;
+    }
+    if (preferences?.dietaryRestrictions) 
+    {
+      userData.preferences.dietaryRestrictions = preferences.dietaryRestrictions;
     }
 
     const newUser = await User.create(userData);
@@ -112,6 +112,7 @@ export async function POST(request)
       userId: newUser._id, 
       email: newUser.email 
     });
+
     return NextResponse.json(
       { 
         message: 'User registered successfully', 
@@ -127,7 +128,8 @@ export async function POST(request)
       { status: 201 }
     );
 
-  } catch (error) 
+  } 
+  catch (error) 
   {
     logger.error('Registration error', { error: error.message, stack: error.stack });
     if (error.name === 'ValidationError') 
