@@ -1,9 +1,10 @@
-// backend/test-utils/jest.setup.js
 const mongoose = require('mongoose');
+process.env.NODE_ENV = 'test';
 
-// Mock Next.js NextResponse to work like a regular response object
-const mockNextResponse = {
-  json: (data, options = {}) => ({
+const mockNextResponse = 
+{
+  json: (data, options = {}) => (
+  {
     _data: data,
     statusCode: options.status || 200,
     status: options.status || 200,
@@ -11,43 +12,62 @@ const mockNextResponse = {
   })
 };
 
-// Create a virtual module for next/server
-jest.doMock('next/server', () => ({
+jest.doMock('next/server', () => (
+{
   NextResponse: mockNextResponse
 }), { virtual: true });
 
-// Global test timeout
 jest.setTimeout(30000);
 
-// Suppress console logs during tests
-global.console = {
+const originalConsole = { ...console };
+global.console = 
+{
   ...console,
   log: jest.fn(),
   warn: jest.fn(),
-  error: jest.fn()
+  error: originalConsole.error,
+  info: jest.fn()
 };
 
-// Clean up after each test
-afterEach(async () => {
-  if (mongoose.connection.readyState !== 0) {
+global.createMockRequest = (body = {}, options = {}) => 
+{
+  return {
+    json: async () => body,
+    headers: new Map(options.headers || []),
+    params: options.params || {},
+    ip: options.ip || '127.0.0.1',
+    get: (header) => options.headers?.[header] || null,
+    ...options
+  };
+};
+
+afterEach(async () => 
+{
+  if (mongoose.connection.readyState !== 0) 
+  {
     const collections = mongoose.connection.collections;
-    for (const key in collections) {
-      try {
+    for (const key in collections) 
+    {
+      try 
+      {
         await collections[key].deleteMany({});
-      } catch (error) {
-        // Ignore cleanup errors
+      } catch (error) 
+      {
       }
     }
   }
+  jest.clearAllMocks();
 });
 
-// Final cleanup
-afterAll(async () => {
-  if (mongoose.connection.readyState !== 0) {
-    try {
+afterAll(async () => 
+{
+  if (mongoose.connection.readyState !== 0) 
+  {
+    try 
+    {
       await mongoose.connection.close();
-    } catch (error) {
-      // Ignore cleanup errors
+    } catch (error) 
+    {
     }
   }
 });

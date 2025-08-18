@@ -1,25 +1,25 @@
-// backend/test-utils/globalSetup.js
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env.test') });
 
-const globalSetup = async () => {
+const globalSetup = async () => 
+{
   let mongoUri;
-
-  // Always use in-memory server for tests to avoid conflicts
-  try {
-    const mongod = await MongoMemoryServer.create({
-      instance: {
+  try 
+  {
+    const mongod = await MongoMemoryServer.create(
+      {
+      instance: 
+      {
         dbName: 'calorietracker_test',
       },
     });
-    
     mongoUri = mongod.getUri();
     global.__MONGOD__ = mongod;
     process.env.MONGODB_URI = mongoUri;
-    
     console.log(`Test MongoDB server started at: ${mongoUri}`);
-  } catch (error) {
+  } catch (error) 
+  {
     console.error('Failed to start MongoDB Memory Server:', error);
     process.exit(1);
   }

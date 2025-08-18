@@ -13,7 +13,8 @@ dotenv.config(); // load environment variables from .env file
 const app = express();
 
 // simple logger middleware to log all incoming requests to server console
-app.use((req, res, next) => {
+app.use((req, res, next) => 
+{
   console.log(`incoming ${req.method} request to ${req.url}`);
   next();
 });
@@ -30,16 +31,19 @@ app.use("/api/auth", authRoutes);
 app.use("/api/menus", menuRoutes); // Add this line
 
 // protected route example: requires valid jwt token to access
-app.get("/api/protected", authMiddleware, (req, res) => {
+app.get("/api/protected", authMiddleware, (req, res) => 
+{
   // if token is valid, user info is attached to req.user by authMiddleware
   res.json({ message: "Access granted to protected route", user: req.user });
 });
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test') 
+{
   app.use(rateLimitMiddleware);
 }
 
 const PORT = process.env.PORT || 4000; // use env port or default to 4000
-app.listen(PORT, () => {
+app.listen(PORT, () => 
+{
   console.log(`server running on port ${PORT}`);
 });

@@ -1,34 +1,37 @@
-// backend/__tests__/menus.sync.test.js
 const mongoose = require('mongoose');
 
-// Import route handlers
+jest.mock('../lib/db.js', () => (
+{
+  __esModule: true,
+  default: jest.fn().mockResolvedValue(true)
+}));
+
 let GET, POST;
 
-// Create mock request
-function createRequest(body = {}) {
-  return {
-    json: async () => body,
-    headers: new Map()
-  };
+function createRequest(body = {}) 
+{
+  return global.createMockRequest(body);
 }
 
-describe('Menu Sync Routes', () => {
-  beforeAll(async () => {
-    if (mongoose.connection.readyState === 0) {
+describe('Menu Sync Routes', () => 
+{
+  beforeAll(async () => 
+  {
+    if (mongoose.connection.readyState === 0) 
+    {
       await mongoose.connect(process.env.MONGODB_URI);
     }
-    
-    // Dynamic import for ES modules
     const menuModule = await import('../api/menus/sync/route.js');
     GET = menuModule.GET;
     POST = menuModule.POST;
   });
 
-  describe('GET /api/menus/sync', () => {
-    test('returns success status', async () => {
+  describe('GET /api/menus/sync', () => 
+  {
+    test('returns success status', async () => 
+    {
       const req = createRequest();
       const res = await GET(req);
-
       expect(res.statusCode).toBe(200);
       expect(res._data).toHaveProperty('status', 'success');
       expect(res._data).toHaveProperty('message', 'Menu sync route is working');
@@ -38,12 +41,13 @@ describe('Menu Sync Routes', () => {
     });
   });
 
-  describe('POST /api/menus/sync', () => {
-    test('triggers menu sync successfully', async () => {
+  describe('POST /api/menus/sync', () => 
+  {
+    test('triggers menu sync successfully', async () => 
+    {
       const requestBody = { source: 'test' };
       const req = createRequest(requestBody);
       const res = await POST(req);
-
       expect(res.statusCode).toBe(200);
       expect(res._data).toHaveProperty('status', 'success');
       expect(res._data).toHaveProperty('message', 'Menu sync triggered successfully');
@@ -53,10 +57,10 @@ describe('Menu Sync Routes', () => {
       expect(res._data.menus.length).toBeGreaterThan(0);
     });
 
-    test('returns stub menu data', async () => {
+    test('returns stub menu data', async () => 
+    {
       const req = createRequest({});
       const res = await POST(req);
-
       expect(res.statusCode).toBe(200);
       expect(res._data.menus).toEqual([
         { id: 1, name: "sample menu item 1", calories: 100 },

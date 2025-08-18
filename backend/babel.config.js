@@ -1,13 +1,17 @@
-// backend/babel.config.js
-module.exports = {
-  presets: [
-    ['@babel/preset-env', { 
+module.exports = 
+{
+  presets: 
+  [
+    ['@babel/preset-env', 
+    { 
       targets: { node: 'current' },
       modules: 'commonjs'
     }]
   ],
-  plugins: [
-    ['@babel/plugin-transform-modules-commonjs', { 
+  plugins: 
+  [
+    ['@babel/plugin-transform-modules-commonjs', 
+    { 
       allowTopLevelThis: true,
       strict: false 
     }]

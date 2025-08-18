@@ -2,12 +2,14 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Backend testing setup for CalorieTracker",
-  "scripts": {
+  "scripts": 
+  {
     "test": "jest --config backend/jest.config.cjs --runInBand",
     "test:watch": "jest --config backend/jest.config.cjs --watch --runInBand",
     "test:coverage": "jest --config backend/jest.config.cjs --coverage --runInBand"
   },
-  "devDependencies": {
+  "devDependencies": 
+  {
     "@babel/core": "^7.22.0",
     "@babel/preset-env": "^7.22.0",
     "@babel/preset-react": "^7.22.0",
@@ -17,7 +19,8 @@
     "mongodb-memory-server": "^8.12.2",
     "supertest": "^6.3.3"
   },
-  "dependencies": {
+  "dependencies": 
+  {
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "express-rate-limit": "^6.8.1",

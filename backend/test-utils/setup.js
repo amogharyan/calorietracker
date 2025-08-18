@@ -4,23 +4,27 @@ import { connectDB, disconnectDB } from '../lib/db.js';
 
 let mongoServer;
 
-beforeAll(async () => {
+beforeAll(async () => 
+{
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
   await connectDB(uri);
 });
 
-beforeEach(async () => {
-  // Clear all collections before each test
+beforeEach(async () => 
+{
   const collections = mongoose.connection.collections;
-  for (const key in collections) {
+  for (const key in collections) 
+  {
     await collections[key].deleteMany({});
   }
 });
 
-afterAll(async () => {
+afterAll(async () => 
+{
   await disconnectDB();
-  if (mongoServer) {
+  if (mongoServer) 
+  {
     await mongoServer.stop();
   }
 });

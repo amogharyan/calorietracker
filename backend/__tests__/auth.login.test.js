@@ -1,118 +1,102 @@
-// backend/__tests__/auth.login.test.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-// Mock logger before any imports
-jest.mock('../lib/logger.js', () => ({
-  default: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn()
-  }
-}));
-
-// Import modules
 let User, POST;
 
-// Create mock request
 function createRequest(body) {
-  return {
-    json: async () => body,
-    headers: new Map()
-  };
+  return global.createMockRequest(body);
 }
 
 describe('POST /api/auth/login', () => {
-  beforeAll(async () => {
-    // Connect to test database
-    if (mongoose.connection.readyState === 0) {
+  beforeAll(async () => 
+  {
+    if (mongoose.connection.readyState === 0)
+    {
       await mongoose.connect(process.env.MONGODB_URI);
     }
-    
-    // Dynamic imports for ES modules
     const userModule = await import('../models/User.js');
     const loginModule = await import('../api/auth/login/route.js');
-    
     User = userModule.default;
     POST = loginModule.POST;
   });
 
-  beforeEach(async () => {
-    // Clear and create test user
+  beforeEach(async () => 
+  {
     await User.deleteMany({});
     const hashed = await bcrypt.hash('Testpass123!', 10);
-    await User.create({ 
+    await User.create(
+    { 
       name: 'Login User',
       email: 'loginuser@example.com', 
       password: hashed 
     });
   });
 
-  afterEach(async () => {
+  afterEach(async () =>
+  {
     await User.deleteMany({});
   });
 
-  test('logs in with correct credentials', async () => {
-    const req = createRequest({
+  test('logs in with correct credentials', async () => 
+  {
+    const req = createRequest(
+    {
       email: 'loginuser@example.com',
       password: 'Testpass123!'
     });
-    
     const res = await POST(req);
-    
     expect(res.statusCode).toBe(200);
     expect(res._data).toHaveProperty('token');
     expect(res._data).toHaveProperty('user');
     expect(res._data.user).toHaveProperty('email', 'loginuser@example.com');
   });
 
-  test('fails with wrong password', async () => {
-    const req = createRequest({
+  test('fails with wrong password', async () => 
+  {
+    const req = createRequest(
+    {
       email: 'loginuser@example.com',
       password: 'wrongpassword'
     });
-    
     const res = await POST(req);
-    
     expect(res.statusCode).toBe(401);
     expect(res._data).toHaveProperty('message');
     expect(res._data.message).toBe('Invalid email or password');
   });
 
-  test('fails with non-existent user', async () => {
-    const req = createRequest({
+  test('fails with non-existent user', async () =>
+  {
+    const req = createRequest(
+    {
       email: 'nonexistent@example.com',
       password: 'Testpass123!'
     });
-    
     const res = await POST(req);
-    
     expect(res.statusCode).toBe(401);
     expect(res._data).toHaveProperty('message');
     expect(res._data.message).toBe('Invalid email or password');
   });
 
-  test('fails with missing credentials', async () => {
-    const req = createRequest({
+  test('fails with missing credentials', async () => 
+  {
+    const req = createRequest(
+    {
       email: 'loginuser@example.com'
-      // missing password
     });
-    
     const res = await POST(req);
-    
     expect(res.statusCode).toBe(400);
     expect(res._data).toHaveProperty('message');
     expect(res._data.message).toBe('Email and password are required');
   });
 
-  test('fails with invalid email format', async () => {
-    const req = createRequest({
+  test('fails with invalid email format', async () => 
+  {
+    const req = createRequest(
+    {
       email: 'invalid-email',
       password: 'Testpass123!'
     });
-    
     const res = await POST(req);
-    
     expect(res.statusCode).toBe(400);
     expect(res._data).toHaveProperty('message');
     expect(res._data.message).toBe('Please provide a valid email address');

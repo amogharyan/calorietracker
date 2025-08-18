@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
-const nutritionSchema = new mongoose.Schema({
+const nutritionSchema = new mongoose.Schema(
+{
   calories: { type: Number, required: true, min: 0 },
   protein: { type: Number, default: 0, min: 0 },
   carbs: { type: Number, default: 0, min: 0 },
@@ -11,70 +12,97 @@ const nutritionSchema = new mongoose.Schema({
   servingSize: { type: String, default: '1 serving' },
 }, { _id: false });
 
-const menuItemSchema = new mongoose.Schema({
-  name: {
+const menuItemSchema = new mongoose.Schema(
+{
+  name: 
+  {
     type: String,
     required: [true, 'Menu item name is required'],
     trim: true,
     maxlength: [100, 'Menu item name cannot exceed 100 characters'],
   },
-  description: {
+
+  description: 
+  {
     type: String,
     trim: true,
     maxlength: [500, 'Description cannot exceed 500 characters'],
   },
-  category: {
+
+  category: 
+  {
     type: String,
     enum: ['appetizer', 'main-course', 'dessert', 'beverage', 'side', 'snack', 'salad', 'soup'],
     required: true,
   },
-  nutrition: {
+
+  nutrition: 
+  {
     type: nutritionSchema,
     required: true,
   },
-  confidenceScore: {
+
+  confidenceScore: 
+  {
     type: Number,
     min: 0,
     max: 1,
     default: 1,
   },
-  allergens: [{
+
+  allergens: [
+  {
     type: String,
     enum: ['dairy', 'eggs', 'fish', 'shellfish', 'nuts', 'peanuts', 'soy', 'wheat', 'gluten'],
   }],
-  dietaryTags: [{
+
+  dietaryTags: [
+  {
     type: String,
     enum: ['vegetarian', 'vegan', 'gluten-free', 'dairy-free', 'nut-free', 'keto', 'paleo', 'low-sodium', 'organic'],
   }],
-  restaurant: {
+
+  restaurant: 
+  {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Restaurant',
     required: true,
   },
-  price: {
+
+  price: 
+  {
     type: Number,
     min: 0,
   },
-  availability: {
+
+  availability: 
+  {
     type: String,
     enum: ['breakfast', 'lunch', 'dinner', 'all-day'],
     default: 'all-day',
   },
-  isActive: {
+
+  isActive: 
+  {
     type: Boolean,
     default: true,
   },
-  lastUpdated: {
+
+  lastUpdated: 
+  {
     type: Date,
     default: Date.now,
   },
-  lastScraped: {
+
+  lastScraped: 
+  {
     type: Date,
     default: Date.now,
   },
   sourceUrl: String,
   imageUrl: String,
-}, {
+}, 
+{
   timestamps: true,
 });
 

@@ -1,24 +1,28 @@
-// backend/jest.config.cjs
 require('dotenv').config({ path: './backend/.env.test' });
 
-module.exports = {
+module.exports = 
+{
   testEnvironment: 'node',
   testTimeout: 30000,
   roots: ['<rootDir>/'],
   testMatch: ['<rootDir>/__tests__/**/*.test.js'],
-  moduleNameMapper: {
+  moduleNameMapper: 
+  {
     '^@/(.*)$': '<rootDir>/$1',
     '^../../../../../lib/db.js$': '<rootDir>/lib/db.js',
-    '^@/lib/(.*)$': '<rootDir>/lib/$1'
+    '^@/lib/(.*)$': '<rootDir>/lib/$1',
+    '^next/server$': '<rootDir>/test-utils/nextServerMock.js'
   },
   setupFilesAfterEnv: ['<rootDir>/test-utils/jest.setup.js'],
   globalSetup: '<rootDir>/test-utils/globalSetup.js',
   globalTeardown: '<rootDir>/test-utils/globalTeardown.js',
-  transform: {
+  transform: 
+  {
     '^.+\\.js$': 'babel-jest'
   },
   moduleFileExtensions: ['js', 'json'],
-  collectCoverageFrom: [
+  collectCoverageFrom: 
+  [
     'backend/**/*.js',
     '!backend/node_modules/**',
     '!backend/__tests__/**',
@@ -27,5 +31,11 @@ module.exports = {
     '!backend/jest.config.cjs'
   ],
   clearMocks: true,
-  restoreMocks: true
+  restoreMocks: true,
+  testPathIgnorePatterns: 
+  [
+    '/node_modules/',
+    '/dist/',
+    '/build/'
+  ]
 };

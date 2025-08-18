@@ -5,28 +5,35 @@ import connectDB from '@/lib/db.js';
 import { NextResponse } from 'next/server';
 import logger from '@/lib/logger';
 
-export async function POST(request) {
-  try {
+export async function POST(request) 
+{
+  try 
+  {
     await connectDB();
     const { email, password } = await request.json();
-    if (!email || !password) {
+    if (!email || !password) 
+    {
       return NextResponse.json(
         { message: 'Email and password are required' },
         { status: 400 }
       );
     }
-    if (!validator.isEmail(email)) {
+
+    if (!validator.isEmail(email)) 
+    {
       return NextResponse.json(
         { message: 'Please provide a valid email address' },
         { status: 400 }
       );
     }
 
-    const user = await User.findOne({ 
+    const user = await User.findOne(
+    { 
       email: email.toLowerCase().trim(),
       isActive: true 
     }).select('+password');
-    if (!user) {
+    if (!user) 
+    {
       logger.warn('Login attempt with non-existent email', { email });
       return NextResponse.json(
         { message: 'Invalid email or password' },
@@ -35,8 +42,10 @@ export async function POST(request) {
     }
 
     const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      logger.warn('Login attempt with incorrect password', { 
+    if (!isMatch) 
+    {
+      logger.warn('Login attempt with incorrect password', 
+      { 
         email, 
         userId: user._id 
       });
@@ -47,13 +56,15 @@ export async function POST(request) {
     }
 
     await user.updateLastLogin();
-    const payload = { 
+    const payload = 
+    { 
       id: user._id, 
       email: user.email,
       name: user.name 
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
-    logger.info('User logged in successfully', { 
+    logger.info('User logged in successfully', 
+    { 
       userId: user._id, 
       email: user.email 
     });
@@ -61,7 +72,8 @@ export async function POST(request) {
       {
         message: 'Logged in successfully',
         token,
-        user: {
+        user: 
+        {
           id: user._id,
           email: user.email,
           name: user.name,
@@ -74,7 +86,8 @@ export async function POST(request) {
       { status: 200 }
     );
 
-  } catch (error) {
+  } catch (error) 
+  {
     logger.error('Login error', { error: error.message, stack: error.stack });
     return NextResponse.json(
       { message: 'Internal server error. Please try again later.' },

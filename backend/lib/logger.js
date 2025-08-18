@@ -1,8 +1,28 @@
-// lib/logger.js
-const logger = {
-  info: (message, meta = {}) => console.log(`INFO: ${message}`, meta),
-  warn: (message, meta = {}) => console.warn(`WARN: ${message}`, meta),
-  error: (message, meta = {}) => console.error(`ERROR: ${message}`, meta),
+const logger = 
+{
+  info: (message, meta = {}) => 
+  {
+    if (process.env.NODE_ENV !== 'test') 
+    {
+      console.log(`INFO: ${message}`, meta);
+    }
+  },
+
+  warn: (message, meta = {}) => 
+  {
+    if (process.env.NODE_ENV !== 'test') 
+    {
+      console.warn(`WARN: ${message}`, meta);
+    }
+  },
+
+  error: (message, meta = {}) => 
+  {
+    if (process.env.NODE_ENV !== 'test') 
+    {
+      console.error(`ERROR: ${message}`, meta);
+    }
+  },
 }
 
-export default logger
+export default logger;

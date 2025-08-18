@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db.js';
 
-export async function GET(request) {
-  try {
+export async function GET(request) 
+{
+  try 
+  {
     await connectDB();
-    
     return NextResponse.json(
       { 
         message: 'Menu sync route is working',
@@ -15,7 +16,8 @@ export async function GET(request) {
       { status: 200 }
     );
 
-  } catch (error) {
+  } catch (error) 
+  {
     console.error('Menu sync error:', error);
     return NextResponse.json(
       { 
@@ -27,13 +29,13 @@ export async function GET(request) {
   }
 }
 
-export async function POST(request) {
-  try {
-    await connectDB();
-    
+export async function POST(request) 
+{
+  try 
+  {
+    await connectDB();  
     const body = await request.json();
     console.log('Menu sync triggered with data:', body);
-    
     function stubMenus()
     {
         return [
@@ -52,7 +54,8 @@ export async function POST(request) {
       { status: 200 }
     );
 
-  } catch (error) {
+  } catch (error) 
+  {
     console.error('Menu sync POST error:', error);
     return NextResponse.json(
       { 

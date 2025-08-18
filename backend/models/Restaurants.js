@@ -1,18 +1,24 @@
 import mongoose from 'mongoose';
 
-const restaurantSchema = new mongoose.Schema({
-  name: {
+const restaurantSchema = new mongoose.Schema(
+{
+  name: 
+  {
     type: String,
     required: [true, 'Restaurant name is required'],
     trim: true,
     unique: true,
   },
-  description: {
+
+  description: 
+  {
     type: String,
     trim: true,
     maxlength: [500, 'Description cannot exceed 500 characters'],
   },
-  location: {
+
+  location: 
+  {
     address: { type: String, required: true },
     building: String,
     floor: String,
@@ -21,33 +27,45 @@ const restaurantSchema = new mongoose.Schema({
       longitude: { type: Number, min: -180, max: 180 },
     },
   },
-  contact: {
-    phone: {
+
+  contact: 
+  {
+    phone: 
+    {
       type: String,
-      validate: {
+      validate: 
+      {
         validator: v => /^\+?[\d\s\-()]{7,}$/.test(v),
         message: props => `${props.value} is not a valid phone number`
       }
     },
-    email: {
+
+    email: 
+    {
       type: String,
       lowercase: true,
       trim: true,
-      validate: {
+      validate: 
+      {
         validator: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
         message: props => `${props.value} is not a valid email`
       }
     },
-    website: {
+
+    website: 
+    {
       type: String,
       trim: true,
-      validate: {
+      validate: 
+      {
         validator: v => /^https?:\/\/\S+$/.test(v),
         message: props => `${props.value} is not a valid URL`
       }
     },
   },
-  hours: {
+
+  hours: 
+  {
     monday: { open: String, close: String },
     tuesday: { open: String, close: String },
     wednesday: { open: String, close: String },
@@ -56,43 +74,58 @@ const restaurantSchema = new mongoose.Schema({
     saturday: { open: String, close: String },
     sunday: { open: String, close: String },
   },
-  cuisine: [{
+
+  cuisine: [
+  {
     type: String,
     enum: ['american', 'italian', 'mexican', 'chinese', 'indian', 'mediterranean', 'thai', 'japanese', 'korean', 'other'],
     default: 'other'
   }],
-  priceRange: {
+
+  priceRange: 
+  {
     type: String,
     enum: ['$', '$$', '$$$', '$$$$'],
     default: '$$',
   },
-  acceptsMealPlan: {
+
+  acceptsMealPlan: 
+  {
     type: Boolean,
     default: true,
   },
-  acceptsFlexDollars: {
+
+  acceptsFlexDollars: 
+  {
     type: Boolean,
     default: true,
   },
-  rating: {
+  rating: 
+  {
     average: { type: Number, min: 0, max: 5, default: 0 },
     count: { type: Number, default: 0 },
   },
-     reviews: [{
+     reviews: [
+    {
      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
      rating: { type: Number, min: 1, max: 5 },
      comment: { type: String, maxlength: 500 },
      createdAt: { type: Date, default: Date.now },
      }],
-  isActive: {
+
+  isActive: 
+  {
     type: Boolean,
     default: true,
   },
-  lastMenuUpdate: {
+
+  lastMenuUpdate: 
+  {
     type: Date,
     default: Date.now,
   },
-}, {
+}, 
+{
   timestamps: true,
 });
 
