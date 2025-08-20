@@ -192,4 +192,7 @@ menuItemSchema.index({ 'nutrition.calories': 1 });
 menuItemSchema.index({ canonicalName: 1 });
 menuItemSchema.index({ rawHtmlHash: 1 });
 
+// explicit index for restaurant lookups (important for joins and queries by source)
+menuItemSchema.index({ restaurant: 1 });
+
 export const MenuItem = mongoose.models.MenuItem || mongoose.model('MenuItem', menuItemSchema);
