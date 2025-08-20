@@ -1,0 +1,102 @@
+{
+	"id": "09d700c1-bb72-442c-9971-3a7f90c5a629",
+	"name": "CalorieTracker API",
+	"timestamp": "2025-08-05T17:40:13.700Z",
+	"collection_id": "47356775-b38993f6-81da-4164-bc4e-0f3c84eb6427",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 0,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2025-08-05T17:40:12.843Z",
+	"totalFail": 5,
+	"results": [
+		{
+			"id": "c48b71f5-a95b-4cf7-85cd-8e9e10549dd5",
+			"name": "Register User",
+			"url": "http://localhost:4000/api/auth/register",
+			"time": 566,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 201": false,
+				"Response has success message": false
+			},
+			"testPassFailCounts": {
+				"Status code is 201": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response has success message": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				566
+			],
+			"allTests": [
+				{
+					"Status code is 201": false,
+					"Response has success message": false
+				}
+			]
+		},
+		{
+			"id": "092f17b8-4935-4809-8eaa-9eb72d316e89",
+			"name": "Login",
+			"url": "http://localhost:4000/api/auth/login",
+			"time": 58,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Status code is 200": false,
+				"Response has JWT token": false,
+				"Login message is correct": false
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response has JWT token": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Login message is correct": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				58
+			],
+			"allTests": [
+				{
+					"Status code is 200": false,
+					"Response has JWT token": false,
+					"Login message is correct": false
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 624,
+	"collection": {
+		"requests": [
+			{
+				"id": "c48b71f5-a95b-4cf7-85cd-8e9e10549dd5",
+				"method": "POST"
+			},
+			{
+				"id": "092f17b8-4935-4809-8eaa-9eb72d316e89",
+				"method": "POST"
+			}
+		]
+	}
+}
