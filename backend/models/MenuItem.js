@@ -154,11 +154,12 @@ const menuItemSchema = new mongoose.Schema(
       trim: true,
     },
 
-    // origin of calorie data 
+    // origin of calorie data
     caloriesSource:
     {
       type: String,
-      enum: ['usda', 'ml', 'scraped', 'manual'],
+      enum: ['scraper', 'usda', 'manual'],
+      default: 'scraper',
     },
 
     // checksum/hash of the raw html used to detect content changes
