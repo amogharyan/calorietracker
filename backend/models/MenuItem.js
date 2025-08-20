@@ -30,16 +30,16 @@ const menuItemSchema = new mongoose.Schema(
     name:
     {
       type: String,
-      required: [true, 'Menu item name is required'],
+      required: [true, 'menu item name is required'],
       trim: true,
-      maxlength: [100, 'Menu item name cannot exceed 100 characters'],
+      maxlength: [100, 'menu item name cannot exceed 100 characters'],
     },
 
     description:
     {
       type: String,
       trim: true,
-      maxlength: [500, 'Description cannot exceed 500 characters'],
+      maxlength: [500, 'description cannot exceed 500 characters'],
     },
 
     category:
@@ -49,14 +49,14 @@ const menuItemSchema = new mongoose.Schema(
       required: true,
     },
 
-    // nested nutrition block (keep as-is for detailed nutrients)
+    // nested nutrition block (detailed nutrients remain here)
     nutrition:
     {
       type: nutritionSchema,
       required: true,
     },
 
-    // canonical confidence value for calorie/metadata reliability (0-1)
+    // canonical confidence value for calorie/metadata reliability (0–1)
     confidence:
     {
       type: Number,
@@ -175,7 +175,7 @@ const menuItemSchema = new mongoose.Schema(
   }
 );
 
-// combined text index for name / description / dietary tags to support search
+// text index for search across name, description, and tags
 menuItemSchema.index(
   {
     name: 'text',
@@ -184,15 +184,11 @@ menuItemSchema.index(
   }
 );
 
-// compound and single-field indexes for common queries
+// compound indexes for common queries
 menuItemSchema.index({ restaurant: 1, category: 1 });
-menuItemSchema.index({ dietaryTags: 1 });
 menuItemSchema.index({ isActive: 1, availability: 1 });
 menuItemSchema.index({ 'nutrition.calories': 1 });
 menuItemSchema.index({ canonicalName: 1 });
 menuItemSchema.index({ rawHtmlHash: 1 });
-
-// explicit index for restaurant lookups (important for joins and queries by source)
-menuItemSchema.index({ restaurant: 1 });
 
 export const MenuItem = mongoose.models.MenuItem || mongoose.model('MenuItem', menuItemSchema);
