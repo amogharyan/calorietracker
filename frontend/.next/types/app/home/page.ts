@@ -1,8 +1,8 @@
-// File: C:\Users\Amogh\Coding\calorietracker\frontend\app\page.js
-import * as entry from '../../../app/page.js'
+// File: /Users/amogh/Projects/calorietracker/frontend/app/home/page.js
+import * as entry from '../../../../app/home/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../app/page.js')
+type TEntry = typeof import('../../../../app/home/page.js')
 
 // Check that the entry is a valid entry
 checkFields<Diff<{
