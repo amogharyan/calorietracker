@@ -1,13 +1,27 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       colors: {
+        // Dark theme colors
+        darkgreen: {
+          50: '#E6F2ED',
+          100: '#C1E0D1',
+          200: '#97CCB3',
+          300: '#6DB895',
+          400: '#4EA87E',
+          500: '#2F9967',
+          600: '#2A8C5F',
+          700: '#237C54',
+          800: '#1D6D4A',
+          900: '#155239',
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {

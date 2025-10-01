@@ -1,0 +1,126 @@
+## Relevant Files
+
+- `app/home/page.js` - **CREATED** - Home screen: search bar, summary card, quick links to dining halls.
+- `tailwind.config.js` - **CREATED** - TailwindCSS configuration with custom theme.
+- `postcss.config.js` - **CREATED** - PostCSS configuration for TailwindCSS processing.
+- `babel.config.js` - **CREATED** - Babel configuration for React/JSX support in tests.
+- `jest.config.js` - **CREATED** - Jest configuration for Next.js testing.
+- `jest.setup.js` - **CREATED** - Jest setup file for testing library DOM.
+- `app/globals.css` - **MODIFIED** - Added TailwindCSS directives.
+- `__tests__/UserProfile.test.jsx` - **MODIFIED** - Fixed import path for component.
+- `app/menu/page.js` - **CREATED** - Menu browsing page with animated dropdown selectors for dining hall and meal time selection.
+- `app/log/page.js` - Daily log page: calorie/macros progress, logged meals list.
+- `app/profile/page.js` - Profile page: calorie goal input, user info display.
+- `app/components/Navbar.jsx` - Navigation bar: links to pages, profile/settings.
+- `app/components/DishCard.jsx` - Displays dish info, nutritional facts, add button.
+- `app/components/ProgressChart.jsx` - Visualization for calorie progress (progress bar/donut chart).
+- `app/components/MacroBreakdown.jsx` - Macro breakdown chart/list.
+- `app/components/DatePicker.jsx` - Date selection for log/history view.
+- `app/api/diningHalls.js` - API calls for dining halls and menus.
+- `app/api/log.js` - API calls for logging meals, fetching/deleting/updating logs.
+- `app/api/profile.js` - API calls for profile/calorie goals.
+- `__tests__/components/DishCard.test.jsx` - Unit tests for DishCard.
+- `__tests__/components/ProgressChart.test.jsx` - Unit tests for ProgressChart.
+- `__tests__/components/MacroBreakdown.test.jsx` - Unit tests for MacroBreakdown.
+- `__tests__/pages/Menu.test.jsx` - Unit tests for Menu page.
+- `__tests__/pages/Log.test.jsx` - Unit tests for Log page.
+
+### Notes
+
+- Place tests alongside code files in their respective directories.
+- Use `npm test` to run all tests, or `npm test -- --testPathPattern=specific-test` for a specific file.
+- Use TailwindCSS with Framer Motion for animations and React Icons for UI elements.
+- Data visualizations should use Recharts library.
+- Follow the dark green (#1a5f1a to #32cd32) color scheme established in the design system.
+
+# Task List Management
+
+Guidelines for managing task lists in markdown files to track progress on completing a PRD
+
+## Task Implementation
+- **One sub-task at a time:** Do **NOT** start the next sub‑task until you ask the user for permission and they say "yes" or "y"
+- **Completion protocol:**  
+  1. When you finish a **sub‑task**, immediately mark it as completed by changing `[ ]` to `[x]`.
+  2. If **all** subtasks underneath a parent task are now `[x]`, follow this sequence:
+    - **First**: Run the full test suite (`pytest`, `npm test`, `bin/rails test`, etc.)
+    - **Only if all tests pass**: Stage changes (`git add .`)
+    - **Clean up**: Remove any temporary files and temporary code before committing
+    - **Commit**: Use a descriptive commit message that:
+      - Uses conventional commit format (`feat:`, `fix:`, `refactor:`, etc.)
+      - Summarizes what was accomplished in the parent task
+      - Lists key changes and additions
+      - References the task number and PRD context
+      - **Formats the message as a single-line command using `-m` flags**, e.g.:
+
+        ```
+        git commit -m "feat: add payment validation logic" -m "- Validates card type and expiry" -m "- Adds unit tests for edge cases" -m "Related to T123 in PRD"
+        ```
+  3. Once all the subtasks are marked completed and changes have been committed, mark the **parent task** as completed.
+- Stop after each sub‑task and wait for the user's go‑ahead.
+
+## Task List Maintenance
+
+1. **Update the task list as you work:**
+   - Mark tasks and subtasks as completed (`[x]`) per the protocol above.
+   - Add new tasks as they emerge.
+
+2. **Maintain the "Relevant Files" section:**
+   - List every file created or modified.
+   - Give each file a one‑line description of its purpose.
+
+## AI Instructions
+
+When working with task lists, the AI must:
+
+1. Regularly update the task list file after finishing any significant work.
+2. Follow the completion protocol:
+   - Mark each finished **sub‑task** `[x]`.
+   - Mark the **parent task** `[x]` once **all** its subtasks are `[x]`.
+3. Add newly discovered tasks.
+4. Keep "Relevant Files" accurate and up to date.
+5. Before starting work, check which sub‑task is next.
+6. After implementing a sub‑task, update the file and then pause for user approval.
+
+## Tasks
+
+- [x] 1.0 Design and Implement Home Screen
+  - [x] 1.1 Scaffold `app/home/page.js` with search bar, summary card, and dining hall quick links.
+  - [x] 1.2 Integrate animated quick links/buttons for available dining halls with hover effects.
+  - [x] 1.3 Display today's calorie summary with progress tracking (ready for daily log API integration).
+  - [x] 1.4 Add navigation to menu and log pages via animated UI elements.
+  - [x] 1.5 Style layout with dark green theme, glassmorphism effects, and Framer Motion animations.
+
+- [ ] 2.0 Build Dining Hall Menu Browsing & Nutritional Info
+  - [x] 2.1 Scaffold `app/menu/page.js` with dropdown/selectors for dining hall and meal time.
+  - [ ] 2.2 Fetch menu data from backend API (`/api/menus/[diningHallId]`).
+  - [ ] 2.3 Create and render `DishCard.jsx` components for each menu item with calories, macros, and dietary labels.
+  - [ ] 2.4 Implement "Add to Log" button with smooth animations on dish cards.
+  - [ ] 2.5 Handle loading states with skeleton loaders, empty states, and error boundaries.
+  - [ ] 2.6 Write unit tests for menu rendering and dish card interactions.
+
+- [ ] 3.0 Develop Meal Logging and Daily Log Feature
+  - [ ] 3.1 Set up `app/log/page.js` page to list logged meals for current day.
+  - [ ] 3.2 Integrate API calls for fetching, adding, editing, and deleting logged meals (`/api/meals`).
+  - [ ] 3.3 Show updates to log immediately after logging a dish with optimistic updates.
+  - [ ] 3.4 Allow user to edit quantities or delete logged items with confirmation modals.
+  - [ ] 3.5 Write unit tests for logging functionality and log rendering with mock API calls.
+  - [ ] 3.6 Display attractive empty state with call-to-action if no meals are logged.
+
+- [ ] 4.0 Create Daily Summary and Macro Visualization
+  - [ ] 4.1 Calculate and display total calories consumed vs. daily goal with animated counters.
+  - [ ] 4.2 Create `ProgressChart.jsx` component using Recharts for circular progress visualization.
+  - [ ] 4.3 Create `MacroBreakdown.jsx` component for protein, carbs, fat breakdown with bar charts.
+  - [ ] 4.4 Fetch calorie goal and user preferences from profile API (`/api/auth/profile`).
+  - [ ] 4.5 Style visualizations with dark green theme and smooth hover animations.
+  - [ ] 4.6 Write comprehensive unit tests for chart components with different data scenarios.
+
+- [ ] 5.0 Implement Profile Management and History Features
+  - [ ] 5.1 Create `app/profile/page.js` with user info display and editable calorie goal input.
+  - [ ] 5.2 Integrate API calls for fetching/updating profile and preferences (`/api/auth/profile`).
+  - [ ] 5.3 Add form validation with real-time feedback for calorie goal (800-5000 range).
+  - [ ] 5.4 Create history view with `DatePicker.jsx` component to browse past meal logs.
+  - [ ] 5.5 Structure meal log API to support date-based queries for historical data.
+  - [ ] 5.6 Implement loading skeletons, empty states, and error boundaries consistently.
+  - [ ] 5.7 Write unit tests for profile updates, form validation, and history navigation.
+
+---

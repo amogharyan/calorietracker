@@ -1,34 +1,55 @@
-/* styles/globals.css */
+/* TailwindCSS Directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Root Variables */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  --primary-color: #4CAF50;
-  --primary-dark: #388E3C;
-  --primary-light: #C8E6C9;
-  --secondary-color: #2196F3;
-  --accent-color: #FF9800;
-  --text-primary: #212121;
-  --text-secondary: #757575;
-  --text-light: #FFFFFF;
-  --background-light: #FFFFFF;
-  --background-dark: #F5F5F5;
-  --error-color: #F44336;
-  --success-color: #4CAF50;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --background: 0 0% 10%; /* Dark background */
+  --foreground: 0 0% 95%; /* Light text on dark background */
+  
+  --card: 0 0% 15%; /* Slightly lighter than background */
+  --card-foreground: 0 0% 95%;
+  
+  --popover: 0 0% 15%;
+  --popover-foreground: 0 0% 95%;
+  
+  --primary: 145 60% 40%; /* Dark green */
+  --primary-foreground: 0 0% 100%; /* White text on primary */
+  
+  --secondary: 0 0% 20%; /* Dark gray */
+  --secondary-foreground: 0 0% 95%;
+  
+  --muted: 0 0% 20%;
+  --muted-foreground: 0 0% 70%;
+  
+  --accent: 145 60% 40%; /* Dark green accent */
+  --accent-foreground: 0 0% 100%;
+  
+  --destructive: 0 70% 50%; /* Red */
+  --destructive-foreground: 0 0% 100%;
+  
+  --border: 0 0% 25%;
+  --input: 0 0% 20%;
+  --ring: 145 60% 40%; /* Dark green ring */
+  
+  --radius: 0.5rem;
+  
+  --primary-color: #2F9967; /* Dark green */
+  --primary-dark: #155239; /* Darker green */
+  --primary-light: #6DB895; /* Lighter green */
+  --secondary-color: #2c2c2c; /* Dark gray */
+  --accent-color: #4EA87E; /* Medium green */
+  --text-primary: #F3F3F3; /* Light text */
+  --text-secondary: #B0B0B0; /* Muted light text */
+  --text-light: #FFFFFF; /* White text */
+  --background-light: #1A1A1A; /* Dark but not pure black */
+  --background-dark: #121212; /* Very dark, almost black */
+  --error-color: #E53935; /* Slightly muted red */
+  --success-color: #2F9967; /* Dark green success */
   --border-radius: 8px;
-  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Darker shadow */
   --transition: all 0.3s ease;
 }
 
@@ -111,10 +132,173 @@ button:focus-visible {
   padding: 0;
 }
 
-.auth-redirect {
-  margin-top: 24px;
-  font-size: 14px;
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: var(--background-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+  background-color: rgba(18, 18, 18, 0.9);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 10;
+  border: 1px solid var(--darkgreen-800);
+  backdrop-filter: blur(10px);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+  font-size: 2.5rem;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, var(--darkgreen-400), var(--darkgreen-600));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.auth-header p {
   color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: rgba(30, 30, 30, 0.8);
+  border: 1px solid var(--darkgreen-900);
+  border-radius: 8px;
+  color: var(--text-light);
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--darkgreen-600);
+  box-shadow: 0 0 0 2px rgba(47, 153, 103, 0.2);
+}
+
+.form-group input.error {
+  border-color: var(--error-color);
+}
+
+.error-message {
+  color: var(--error-color);
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.form-footer {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.primary-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(to right, var(--darkgreen-600), var(--darkgreen-800));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.primary-button:hover {
+  background: linear-gradient(to right, var(--darkgreen-500), var(--darkgreen-700));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(47, 153, 103, 0.3);
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.auth-redirect {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.auth-redirect a {
+  color: var(--darkgreen-400);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.auth-redirect a:hover {
+  color: var(--darkgreen-300);
+  text-decoration: underline;
+}
+
+.auth-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.auth-background-pattern {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(circle, rgba(47, 153, 103, 0.1) 0%, rgba(0, 0, 0, 0) 70%),
+              radial-gradient(circle at top right, rgba(47, 153, 103, 0.08) 0%, rgba(0, 0, 0, 0) 60%),
+              radial-gradient(circle at bottom left, rgba(47, 153, 103, 0.08) 0%, rgba(0, 0, 0, 0) 60%);
 }
 
 .hidden {

@@ -65,18 +65,23 @@ const Login = () => {
       transition: { type: 'spring', stiffness: 100 },
     },
   };
+  
+  const buttonVariants = {
+    hover: { scale: 1.03, boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)' },
+    tap: { scale: 0.98 }
+  };
 
   return (
-    <div className="auth-page login-page">
+    <div className="auth-page login-page bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <motion.div
-        className="auth-card"
+        className="auth-card max-w-md w-full bg-gray-900 border border-gray-800 rounded-lg p-8 shadow-2xl shadow-black/40"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
-        <motion.div className="auth-header" variants={itemVariants}>
-          <h1>Welcome Back</h1>
-          <p>Log in to continue your health journey</p>
+        <motion.div className="auth-header mb-6 text-center" variants={itemVariants}>
+          <h1 className="text-2xl font-bold text-white mb-2">Welcome Back</h1>
+          <p className="text-gray-400">Log in to continue your health journey</p>
         </motion.div>
 
         {errors.general && (
@@ -91,8 +96,8 @@ const Login = () => {
 
         <motion.form onSubmit={handleSubmit} variants={containerVariants}>
           <motion.div className="form-group" variants={itemVariants}>
-            <label htmlFor="email">
-              <FaEnvelope /> Email
+            <label htmlFor="email" className="flex items-center text-gray-200 mb-2">
+              <FaEnvelope className="text-darkgreen-400 mr-2" /> Email
             </label>
             <input
               type="email"
@@ -101,14 +106,14 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className={errors.email ? 'error' : ''}
+              className={`bg-gray-900 border ${errors.email ? 'border-red-500' : 'border-darkgreen-800'} rounded-lg px-4 py-3 w-full text-white focus:outline-none focus:border-darkgreen-500 focus:ring-1 focus:ring-darkgreen-500 transition-all`}
             />
-            {errors.email && <div className="error-message">{errors.email}</div>}
+            {errors.email && <div className="error-message text-red-400 text-sm mt-1">{errors.email}</div>}
           </motion.div>
 
           <motion.div className="form-group" variants={itemVariants}>
-            <label htmlFor="password">
-              <FaLock /> Password
+            <label htmlFor="password" className="flex items-center text-gray-200 mb-2">
+              <FaLock className="text-darkgreen-400 mr-2" /> Password
             </label>
             <input
               type="password"
@@ -117,30 +122,24 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
-              className={errors.password ? 'error' : ''}
+              className={`bg-gray-900 border ${errors.password ? 'border-red-500' : 'border-darkgreen-800'} rounded-lg px-4 py-3 w-full text-white focus:outline-none focus:border-darkgreen-500 focus:ring-1 focus:ring-darkgreen-500 transition-all`}
             />
-            {errors.password && <div className="error-message">{errors.password}</div>}
+            {errors.password && <div className="error-message text-red-400 text-sm mt-1">{errors.password}</div>}
           </motion.div>
 
-          <motion.div className="form-footer" variants={itemVariants}>
+                    <motion.div className="form-footer mt-6 flex flex-col items-center" variants={itemVariants}>
             <motion.button
               type="submit"
-              className="primary-button"
-              disabled={isLoading}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
+              className="bg-gradient-to-r from-darkgreen-700 to-darkgreen-500 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center w-full hover:from-darkgreen-600 hover:to-darkgreen-400 transition-all shadow-lg hover:shadow-darkgreen-700/30"
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
             >
-              {isLoading ? (
-                <span className="loading-spinner"></span>
-              ) : (
-                <>
-                  <FaSignInAlt /> Log In
-                </>
-              )}
+              Log In <FaSignInAlt className="ml-2" />
             </motion.button>
-            <p className="auth-redirect">
-              Don't have an account? <Link href="/register">Sign up</Link>
-            </p>
+            <motion.div className="form-link mt-4 text-gray-400" variants={itemVariants}>
+              Don&apos;t have an account? <Link href="/register" className="text-darkgreen-400 hover:text-darkgreen-300 ml-1 font-medium">Register</Link>
+            </motion.div>
           </motion.div>
         </motion.form>
       </motion.div>

@@ -1,224 +1,108 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaArrowRight, FaUtensils, FaChartLine, FaMobileAlt } from 'react-icons/fa';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Home from './home/page';
 
-const Home = () => {
-  const [activeFeature, setActiveFeature] = useState(0);
+export default function HomePage() {
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+    setIsLoading(false);
+  }, []);
 
-  const features = [
-    {
-      icon: <FaUtensils size={40} />,
-      title: 'Easy Meal Tracking',
-      description: 'Log your meals with just a few taps. Our intuitive interface makes calorie tracking simple and fast.',
-    },
-    {
-      icon: <FaChartLine size={40} />,
-      title: 'Detailed Analytics',
-      description: 'Visualize your nutrition journey with comprehensive charts and insights to help you reach your goals.',
-    },
-    {
-      icon: <FaMobileAlt size={40} />,
-      title: 'Access Anywhere',
-      description: 'Track your calories on any device. Your data syncs automatically across all your devices.',
-    },
-  ];
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 100,
-      },
-    },
-  };
-
-  return (
-    <div className="home-page">
-      {/* Hero Section */}
-      <motion.section
-        className="hero-section"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="hero-content">
-          <motion.h1
-            initial={{ y: -50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 50 }}
-          >
-            Track Your Calories, <br />
-            <span className="highlight">Transform Your Life</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-          >
-            The simplest way to track your nutrition and achieve your health goals.
-            Start your journey to a healthier you today.
-          </motion.p>
-
-          <motion.div
-            className="cta-buttons"
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-          >
-            <Link href="/login">
-              <motion.button
-                className="primary-button"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Get Started <FaArrowRight className="icon" />
-              </motion.button>
-            </Link>
-
-            <Link href="/register">
-              <motion.button
-                className="secondary-button"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Create Account
-              </motion.button>
-            </Link>
-          </motion.div>
-        </div>
-
-        <motion.div
-          className="hero-image"
-          initial={{ x: 100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.4, type: 'spring', stiffness: 50 }}
-        >
-          <img src="/hero-image.png" alt="Calorie tracking app" />
-        </motion.div>
-      </motion.section>
-
-      {/* Features Section */}
-      <motion.section
-        className="features-section"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={containerVariants}
-      >
-        <motion.h2 variants={itemVariants}>Powerful Features</motion.h2>
-        <motion.p variants={itemVariants} className="section-subtitle">
-          Everything you need to maintain a healthy lifestyle
-        </motion.p>
-
-        <div className="features-container">
-          <div className="features-tabs">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                className={`feature-tab ${activeFeature === index ? 'active' : ''}`}
-                onClick={() => setActiveFeature(index)}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                variants={itemVariants}
-              >
-                <div className="feature-icon">{feature.icon}</div>
-                <h3>{feature.title}</h3>
-              </motion.div>
-            ))}
+  // If not authenticated, show landing page or redirect to login
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100">
+        <div className="relative overflow-hidden">
+          {/* Hero Section */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+            <div className="text-center">
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                Track Your
+                <span className="bg-gradient-to-r from-green-500 to-green-600 bg-clip-text text-transparent">
+                  {" "}Nutrition
+                </span>
+                <br />
+                Effortlessly
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                Monitor your daily calorie intake, track macronutrients, and discover healthy dining options 
+                across campus with our comprehensive nutrition tracking platform.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => router.push('/register')}
+                  className="px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all shadow-lg"
+                >
+                  Get Started Free
+                </button>
+                <button
+                  onClick={() => router.push('/login')}
+                  className="px-8 py-3 border-2 border-green-500 text-green-600 font-medium rounded-lg hover:bg-green-50 transform hover:scale-105 transition-all"
+                >
+                  Sign In
+                </button>
+              </div>
+            </div>
           </div>
 
-          <motion.div
-            className="feature-details"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            key={activeFeature}
-          >
-            <h3>{features[activeFeature].title}</h3>
-            <p>{features[activeFeature].description}</p>
-          </motion.div>
+          {/* Features Section */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center p-6 bg-white rounded-xl shadow-lg">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🍽️</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Menu Tracking</h3>
+                <p className="text-gray-600">
+                  Browse and track meals from your favorite dining halls with detailed nutrition information.
+                </p>
+              </div>
+              <div className="text-center p-6 bg-white rounded-xl shadow-lg">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">📊</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Smart Analytics</h3>
+                <p className="text-gray-600">
+                  Get insights into your eating habits with comprehensive charts and progress tracking.
+                </p>
+              </div>
+              <div className="text-center p-6 bg-white rounded-xl shadow-lg">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🎯</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Goal Setting</h3>
+                <p className="text-gray-600">
+                  Set personalized nutrition goals and track your progress towards a healthier lifestyle.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-      </motion.section>
+      </div>
+    );
+  }
 
-      {/* How It Works Section */}
-      <motion.section
-        className="how-it-works-section"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={containerVariants}
-      >
-        <motion.h2 variants={itemVariants}>How It Works</motion.h2>
-        <motion.p variants={itemVariants} className="section-subtitle">
-          Three simple steps to start your health journey
-        </motion.p>
-
-        <div className="steps-container">
-          {[
-            {
-              number: '01',
-              title: 'Create an account',
-              description: 'Sign up in seconds and set your health goals',
-            },
-            {
-              number: '02',
-              title: 'Log your meals',
-              description: 'Easily record what you eat throughout the day',
-            },
-            {
-              number: '03',
-              title: 'Track progress',
-              description: 'Monitor your nutrition and achieve your goals',
-            },
-          ].map((step, index) => (
-            <motion.div className="step-card" key={index} variants={itemVariants}>
-              <div className="step-number">{step.number}</div>
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
-
-      {/* Call to Action Section */}
-      <motion.section
-        className="cta-section"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        <h2>Ready to Start Your Journey?</h2>
-        <p>Join thousands of users who have transformed their lives with our app</p>
-        <Link href="/register">
-          <motion.button
-            className="primary-button"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Get Started Today
-          </motion.button>
-        </Link>
-      </motion.section>
-    </div>
-  );
-};
-
-export default Home;
+  // If authenticated, show the main home dashboard
+  return <Home />;
+}
