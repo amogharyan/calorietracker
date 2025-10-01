@@ -1,0 +1,9 @@
+2:I[8853,[],"ClientPageRoot"]
+3:I[2862,["699","static/chunks/8e1d74a4-326cd673efd1d199.js","723","static/chunks/723-56d3d0f822e42aa7.js","880","static/chunks/880-12a570074e30b92b.js","874","static/chunks/874-2feb0660f744e5c2.js","931","static/chunks/app/page-1e103098694db2b7.js"],"default",1]
+4:I[822,["699","static/chunks/8e1d74a4-326cd673efd1d199.js","723","static/chunks/723-56d3d0f822e42aa7.js","880","static/chunks/880-12a570074e30b92b.js","185","static/chunks/app/layout-41b989287117ca19.js"],"default"]
+5:I[2760,[],""]
+6:I[4275,[],""]
+7:I[1917,["699","static/chunks/8e1d74a4-326cd673efd1d199.js","723","static/chunks/723-56d3d0f822e42aa7.js","880","static/chunks/880-12a570074e30b92b.js","160","static/chunks/app/not-found-dcc5426952474307.js"],"default"]
+0:["wJljHClEF2SQ-iUZZAMCi",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],["",{"children":["__PAGE__",{},[["$L1",["$","$L2",null,{"props":{"params":{},"searchParams":{}},"Component":"$3"}],null],null],null]},[[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/1c67dbec7f2590e9.css","precedence":"next","crossOrigin":"$undefined"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"className":"bg-gray-50","children":["$","$L4",null,{"children":["$","$L5",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","$L7",null,{}],"notFoundStyles":[]}]}]}]}]],null],null],["$L8",null]]]]
+8:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"CalorieTracker - Track Your Nutrition"}],["$","meta","3",{"name":"description","content":"Monitor your daily calorie intake, track macronutrients, and discover healthy dining options across campus."}]]
+1:null
